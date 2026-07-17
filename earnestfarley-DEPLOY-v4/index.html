@@ -45,6 +45,9 @@
     </div>
   </header>
 
+  <div id="smooth-wrapper">
+  <div id="smooth-content">
+
   <main>
     <!-- HERO: cinematic global stage. Photograph + 3D text, no box, no portrait. -->
     <section class="hero-cine">
@@ -54,6 +57,8 @@
         </video>
       </div>
       <div class="cine-atmo" aria-hidden="true"></div>
+      <div class="cine-grade" aria-hidden="true"></div>
+      <div class="cine-grain" aria-hidden="true"></div>
       <div class="wrap cine-content">
         <p class="cine-kicker"><span class="pulse-dot" aria-hidden="true"></span>Earnest Farley &middot; Healthcare operations executive &middot; Open to engagements</p>
         <h1 class="cine-title" aria-label="I build organizations where people and the numbers perform.">
@@ -177,25 +182,25 @@
           <div class="method-stage reveal d1" id="methodStage">
             <article class="method-callout active" data-method="0">
               <svg class="glyph" viewBox="0 0 44 44" aria-hidden="true"><path class="g-draw" d="M22 6 A16 16 0 1 1 8 30" fill="none"/><path class="g-draw g-d2" d="M22 14 L22 22 L28 26" fill="none"/></svg>
-              <h3>90 for 90</h3>
+              <h3 class="shiny">90 for 90</h3>
               <p>A turnaround is not complete until 90% of key KPIs hold for 90 consecutive days. One good quarter is not a turnaround. The standard applies to my own work first.</p>
               <a href="writing.html">Read the framework</a>
             </article>
             <article class="method-callout" data-method="1">
               <svg class="glyph" viewBox="0 0 44 44" aria-hidden="true"><path class="g-draw" d="M8 16 C14 8, 30 8, 36 16 M31 12 L36 16 L31 20" fill="none"/><path class="g-draw g-d2" d="M36 28 C30 36, 14 36, 8 28 M13 32 L8 28 L13 24" fill="none"/></svg>
-              <h3>Cultural Currency</h3>
+              <h3 class="shiny">Cultural Currency</h3>
               <p>Culture is not the mission statement. It is what people trade for status. Change what expertise is worth inside the team, and the culture follows the currency.</p>
               <a href="writing.html">Read the framework</a>
             </article>
             <article class="method-callout" data-method="2">
               <svg class="glyph" viewBox="0 0 44 44" aria-hidden="true"><path class="g-draw" d="M8 36 L8 14 L22 6 L36 14 L36 36" fill="none"/><path class="g-draw g-d2" d="M8 24 L36 24 M22 6 L22 36" fill="none"/></svg>
-              <h3>Behavioral Architecture</h3>
+              <h3 class="shiny">Behavioral Architecture</h3>
               <p>Technology adoption is a design problem. Clear the structural barriers first, then apply behavioral change to the true resistors. Most resistance is structure in disguise.</p>
               <a href="writing.html">Read the framework</a>
             </article>
             <article class="method-callout" data-method="3">
               <svg class="glyph" viewBox="0 0 44 44" aria-hidden="true"><circle class="g-draw" cx="16" cy="22" r="10" fill="none"/><circle class="g-draw g-d2" cx="28" cy="22" r="10" fill="none"/></svg>
-              <h3>Dyad Leadership</h3>
+              <h3 class="shiny">Dyad Leadership</h3>
               <p>Clinicians and operators paired on one scorecard, with shared accountability for quality, financial, and experience results. Goals stop competing when the scorecard is shared.</p>
               <a href="writing.html">Read the framework</a>
             </article>
@@ -389,8 +394,12 @@
     </div>
   </footer>
 
+  </div>
+  </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollSmoother.min.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>
