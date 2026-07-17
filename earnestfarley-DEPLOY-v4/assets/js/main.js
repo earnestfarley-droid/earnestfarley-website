@@ -6,6 +6,18 @@
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var hasGsap = typeof window.gsap !== "undefined";
   if (hasGsap && window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------- smooth inertial scroll ----------
+     ScrollSmoother, not a second scroll library: it's GSAP's own plugin,
+     chosen because (unlike Lenis-style scrollers) it preserves native
+     document scroll semantics, so the sticky header and the pinned
+     #prinPin ScrollTrigger below keep working with no extra code. Must
+     be created before any ScrollTrigger instances below are set up. */
+  if (hasGsap && window.ScrollSmoother && !reduced && document.getElementById("smooth-wrapper")) {
+    gsap.registerPlugin(ScrollSmoother);
+    ScrollSmoother.create({ smooth: 1.5, smoothTouch: 0.15 });
+  }
+
   /* ---------- reading progress bar ---------- */
   var bar = document.querySelector(".progress");
   if (bar && !reduced) {
@@ -16,6 +28,23 @@
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+  }
+
+  /* ---------- ambient field: drifting glow blobs (Vanta-style backdrop,
+     built on the existing GSAP install rather than a new library) ---------- */
+  var glow = document.querySelector(".glow-field");
+  if (glow && hasGsap && !reduced) {
+    var blobDefs = [
+      { cls: "b1", dx: 60, dy: 40, dur: 22 },
+      { cls: "b2", dx: -50, dy: 55, dur: 27 },
+      { cls: "b3", dx: 45, dy: -35, dur: 24 }
+    ];
+    blobDefs.forEach(function (b) {
+      var el = document.createElement("div");
+      el.className = "blob " + b.cls;
+      glow.appendChild(el);
+      gsap.to(el, { x: b.dx, y: b.dy, duration: b.dur, ease: "sine.inOut", yoyo: true, repeat: -1 });
+    });
   }
 
   /* ---------- kinetic headline ---------- */
@@ -63,11 +92,17 @@
       });
       gsap.from(support, { opacity: 0, y: 22, duration: 0.9, ease: "power3.out", stagger: 0.12, delay: 1.0 });
 
+      /* the city breathes: a slow Ken Burns drift on the film itself */
+      gsap.to("#heroFilm", {
+        scale: 1.07, duration: 28, ease: "sine.inOut", yoyo: true, repeat: -1,
+        transformOrigin: "50% 42%"
+      });
+
       /* scroll: the photograph sinks and the words lift away */
       /* scroll planes: scrub moves the containers... */
       if (window.ScrollTrigger) {
         gsap.to(".cine-bg", {
-          yPercent: 10, ease: "none",
+          yPercent: 16, ease: "none",
           scrollTrigger: { trigger: cine, start: "top top", end: "bottom top", scrub: 0.3 }
         });
         gsap.to(".cine-content", {
@@ -211,6 +246,8 @@
         var rx = ((e.clientY - r.top) / r.height - 0.5) * -4.5;
         var ry = ((e.clientX - r.left) / r.width - 0.5) * 4.5;
         card.style.transform = "translateY(-5px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
+        card.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 100).toFixed(1) + "%");
+        card.style.setProperty("--my", (((e.clientY - r.top) / r.height) * 100).toFixed(1) + "%");
       });
       card.addEventListener("pointerleave", function () { card.style.transform = ""; });
     });
