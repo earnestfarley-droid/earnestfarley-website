@@ -133,12 +133,6 @@
       opacity: 0, y: 46, duration: 1.0, ease: "power3.out",
       scrollTrigger: { trigger: ".monitor", start: "top 94%", once: true }
     });
-    if (window.innerWidth > 640) {
-      gsap.fromTo(".monitor", { rotationX: 9, transformOrigin: "center top" }, {
-        rotationX: 0, ease: "none",
-        scrollTrigger: { trigger: ".monitor", start: "top 92%", end: "top 42%", scrub: 0.4 }
-      });
-    }
   }
 
   /* ---------- hero film: Atlanta twilight from a drone ---------- */
@@ -260,8 +254,8 @@
      ============================================================ */
   var vc = document.getElementById("vitals");
   if (vc) {
-    var vctx = vc.getContext("2d");
-    var vdpr = Math.min(window.devicePixelRatio || 1, 2);
+    var vctx = vc.getContext("2d", { desynchronized: true });
+    var vdpr = Math.min(window.devicePixelRatio || 1, 1.5);
     var VW = 0, VH = 0;
     var PAD_L = 56, PAD_R = 96, PAD_T = 26, PAD_B = 30;
 
@@ -518,9 +512,12 @@
       new IntersectionObserver(function (en) { vRunning = en[0].isIntersecting; }).observe(vc);
     }
 
+    var lastFrame = 0;
     function loop(now) {
       requestAnimationFrame(loop);
       if (!vRunning || !VW) return;
+      if (now - lastFrame < 31) return;
+      lastFrame = now;
       if (!phaseT0) phaseT0 = now;
       vctx.clearRect(0, 0, VW, VH);
       drawGrid();
@@ -676,16 +673,45 @@
     });
 
     if (!reduced && "IntersectionObserver" in window) {
+      /* warm the buffer early so playback is instant on arrival */
+      new IntersectionObserver(function (en, obs) {
+        if (en[0].isIntersecting) { showVid.setAttribute("preload", "auto"); showVid.load(); obs.disconnect(); }
+      }, { rootMargin: "150% 0px" }).observe(showVid);
       new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (userPaused) return;
           if (e.isIntersecting) { showVid.play(); setToggleState(true); }
           else { showVid.pause(); }
         });
-      }, { threshold: 0.4 }).observe(showVid);
+      }, { threshold: 0.12, rootMargin: "12% 0px" }).observe(showVid);
     } else {
       setToggleState(false);
     }
+  }
+
+  /* ---------- board-ready biography: copy to clipboard (about page) ---------- */
+  var copyBtn = document.getElementById("copyBio");
+  var bioText = document.getElementById("boardBioText");
+  if (copyBtn && bioText) {
+    copyBtn.addEventListener("click", function () {
+      var text = bioText.innerText;
+      var done = function () {
+        copyBtn.classList.add("copied");
+        copyBtn.textContent = "Copied. Send it up the chain.";
+        setTimeout(function () {
+          copyBtn.classList.remove("copied");
+          copyBtn.textContent = "Copy biography";
+        }, 2600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {});
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy");
+        document.body.removeChild(ta); done();
+      }
+    });
   }
 
   /* ---------- mobile nav + footer year ---------- */
