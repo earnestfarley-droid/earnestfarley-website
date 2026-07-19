@@ -1127,10 +1127,15 @@ footer.site { border-top: 1px solid var(--line-soft); padding: 46px 0 56px; colo
 .footprint .eyebrow { color: #8fa2ff; }
 .footprint .eyebrow::before { background: #8fa2ff; }
 .footprint h1, .footprint h2 { color: #fff; font-size: clamp(30px, 4vw, 48px); max-width: 16ch; }
-.footprint-hero { padding-top: 120px; padding-bottom: 104px; }
-.footprint-hero h1 { font-size: clamp(36px, 5vw, 60px); line-height: 1.02; max-width: 15ch; }
-.footprint-hero .footprint-copy p { font-size: 18.5px; max-width: 50ch; }
-.footprint-hero .footprint-globe { max-width: 600px; }
+.footprint-hero { padding-top: 116px; padding-bottom: 108px; }
+.footprint-hero .footprint-grid { grid-template-columns: minmax(340px, 0.94fr) 1.06fr; gap: 24px; }
+.footprint-hero .footprint-copy { position: relative; z-index: 3; }
+/* headline: force white + a soft backing so it stays legible over the globe no matter what CSS is cached */
+.footprint-hero .footprint-copy h1 { color: #fff; text-shadow: 0 2px 34px rgba(6,12,28,0.62); font-size: clamp(30px, 3.4vw, 46px); line-height: 1.06; max-width: 17ch; }
+.footprint-hero .footprint-copy p { color: #c6d2ee; font-size: 18.5px; max-width: 50ch; }
+.footprint-hero .footprint-globe { width: min(60vw, 860px); max-width: none; justify-self: end; margin-right: -62px; margin-top: -18px; margin-bottom: -18px; }
+/* fade the dark hero into the light section below */
+.footprint-hero::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 170px; z-index: 2; pointer-events: none; background: linear-gradient(to bottom, rgba(11,21,38,0) 0%, rgba(11,21,38,0.5) 42%, var(--porcelain) 100%); }
 .footprint-copy p { color: #b9c6e6; font-size: 18px; line-height: 1.6; max-width: 48ch; margin-top: 18px; }
 .footprint-stats { display: flex; gap: 34px; margin-top: 34px; flex-wrap: wrap; }
 .fp-stat .v { font-family: var(--display); font-stretch: 116%; font-weight: 700; font-size: 42px; color: #fff; line-height: 1; }
@@ -1146,6 +1151,9 @@ footer.site { border-top: 1px solid var(--line-soft); padding: 46px 0 56px; colo
 @media (max-width: 920px) {
   .footprint-grid { grid-template-columns: 1fr; gap: 32px; }
   .footprint-globe { max-width: 440px; order: -1; }
+  .footprint-hero .footprint-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footprint-hero .footprint-globe { width: 100%; max-width: 460px; justify-self: center; margin: 0 auto; order: -1; }
+  .footprint-hero { padding-top: 104px; padding-bottom: 72px; }
 }
 
 :focus-visible { outline: 2px solid var(--ultra); outline-offset: 3px; border-radius: 4px; }

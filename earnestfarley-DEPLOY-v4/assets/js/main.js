@@ -779,8 +779,8 @@
         var arc = {
           va: va, vb: vb, om: om, so: Math.sin(om), intl: !!intl,
           beads: [
-            { off: (idx * 0.37) % 1, spd: 0.05 + (idx % 3) * 0.02, dir: (idx % 2) ? 1 : -1 },
-            { off: ((idx * 0.37) + 0.55) % 1, spd: 0.05 + ((idx + 1) % 3) * 0.02, dir: (idx % 2) ? 1 : -1 }
+            { off: (idx * 0.37) % 1, spd: 0.022 + (idx % 3) * 0.010, dir: (idx % 2) ? 1 : -1 },
+            { off: ((idx * 0.37) + 0.55) % 1, spd: 0.022 + ((idx + 1) % 3) * 0.010, dir: (idx % 2) ? 1 : -1 }
           ]
         };
         seen[key] = arc; ARCS.push(arc);
@@ -794,7 +794,7 @@
     var C_ULTRA = "#5566ff", C_AMBER = "#e6a92a", C_CORAL = "#ff5a44";
 
     var rot = 1.55;            /* start with the Americas + Atlanta hub facing the viewer */
-    var TILT = -0.26;          /* pole tilt toward viewer */
+    var TILT = 0.36;           /* north pole tipped toward viewer: North America framed, south pole (Antarctica) out of view */
     var tiltT = 0, tiltC = 0;  /* cursor-driven tilt easing */
     var gRunning = true, reducedG = reduced;
 
@@ -855,14 +855,15 @@
     /* the static line: faint, so the traveling beads read as the motion */
     function drawArc(arc) {
       var steps = 40, prev = null, ll, lift, p, t, k;
+      var gs = GW / 600;                                   /* scale strokes with globe size */
       gctx.strokeStyle = arc.intl ? C_AMBER : C_ULTRA;
-      gctx.lineWidth = arc.intl ? 1.4 : 1; gctx.lineCap = "round";
+      gctx.lineWidth = (arc.intl ? 3.0 : 2.4) * gs; gctx.lineCap = "round";
       for (k = 0; k <= steps; k++) {
-        t = k / steps; ll = arcLL(arc, t); lift = 1 + 0.17 * Math.sin(Math.PI * t);
+        t = k / steps; ll = arcLL(arc, t); lift = 1;   /* flat lines: hug the sphere surface, no raised arc */
         p = proj(ll.lat, ll.lon, lift);
         if (prev && (p.z > -0.12 || prev.z > -0.12)) {
           var za = (p.z + prev.z) / 2;
-          gctx.globalAlpha = (za > 0 ? 1 : 0.22) * (arc.intl ? 0.34 : 0.15);
+          gctx.globalAlpha = (za > 0 ? 1 : 0.24) * (arc.intl ? 0.52 : 0.32);
           gctx.beginPath(); gctx.moveTo(prev.x, prev.y); gctx.lineTo(p.x, p.y); gctx.stroke();
         }
         prev = p;
@@ -875,15 +876,16 @@
         var bd = arc.beads[bi];
         var t = ((now / 1000) * bd.spd + bd.off) % 1;
         if (bd.dir < 0) t = 1 - t;
-        var ll = arcLL(arc, t), lift = 1 + 0.17 * Math.sin(Math.PI * t), p = proj(ll.lat, ll.lon, lift);
+        var ll = arcLL(arc, t), lift = 1, p = proj(ll.lat, ll.lon, lift);   /* beads ride flat on the surface */
         if (p.z <= -0.02) continue;
+        var bs = GW / 600;                                   /* scale beads with globe size */
         var a = Math.min(1, Math.max(0.1, p.z + 0.25));
-        gctx.globalAlpha = a * 0.85;
-        gctx.beginPath(); gctx.arc(p.x, p.y, 3.6, 0, Math.PI * 2);
-        gctx.fillStyle = arc.intl ? "rgba(255,207,107,0.28)" : "rgba(170,184,255,0.24)"; gctx.fill();
+        gctx.globalAlpha = a * 0.9;
+        gctx.beginPath(); gctx.arc(p.x, p.y, 6.6 * bs, 0, Math.PI * 2);
+        gctx.fillStyle = arc.intl ? "rgba(255,207,107,0.34)" : "rgba(170,184,255,0.30)"; gctx.fill();
         gctx.globalAlpha = a;
-        gctx.beginPath(); gctx.arc(p.x, p.y, 1.7, 0, Math.PI * 2);
-        gctx.fillStyle = arc.intl ? "#ffd98a" : "#c7d2ff"; gctx.fill();
+        gctx.beginPath(); gctx.arc(p.x, p.y, 3.2 * bs, 0, Math.PI * 2);
+        gctx.fillStyle = arc.intl ? "#ffe0a0" : "#d4dcff"; gctx.fill();
         gctx.globalAlpha = 1;
       }
     }
@@ -1027,8 +1029,8 @@
       if (now - gLast < 32) return;   /* ~30fps cap: lighter with the full arc mesh */
       gLast = now;
       if (!reducedG) {
-        rot += 0.0020;                /* reasonable rotation pace */
-        TILT += ((-0.26 + tiltC) - TILT) * 0.05;
+        rot += 0.00085;               /* slow, subtle drift, not a circus */
+        TILT += ((0.36 + tiltC) - TILT) * 0.05;
         tiltC += (tiltT - tiltC) * 0.06;
       }
       drawGlobe(now);
