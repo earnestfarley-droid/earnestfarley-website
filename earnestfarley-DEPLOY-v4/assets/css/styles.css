@@ -847,6 +847,42 @@ header.site { transition: background 0.35s ease, border-color 0.35s ease; }
   color: var(--faint); font-family: var(--mono); font-size: 11.5px; margin: 26px 0; background: var(--surface);
 }
 
+/* ---------- article body utilities (Writing pages) ---------- */
+.article-body .pullquote { margin: 34px 0; font-size: clamp(23px, 3vw, 31px); }
+
+.article-lead::first-letter {
+  float: left;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 0.82;
+  padding: 6px 12px 0 0;
+  color: var(--ultra-deep);
+}
+
+.article-next {
+  margin-top: 46px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.article-next a { color: var(--ultra-deep); }
+.article-next a:hover { color: var(--ultra); }
+
+.article-source {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.article-source a { color: var(--ultra); }
+
 /* ---------- about ---------- */
 .about-grid { display: grid; grid-template-columns: 320px 1fr; gap: 60px; align-items: start; }
 .portrait {
