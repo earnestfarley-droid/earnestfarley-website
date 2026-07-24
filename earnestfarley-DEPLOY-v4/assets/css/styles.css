@@ -329,31 +329,33 @@ section { padding: 96px 0; }
   opacity: 0.05; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-@media (prefers-reduced-motion: no-preference) {
-  .cine-grain { animation: grainShift 0.9s steps(4) infinite; }
-}
-@keyframes grainShift {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-34px, 22px); }
-  50% { transform: translate(18px, -40px); }
-  75% { transform: translate(-26px, -14px); }
-  100% { transform: translate(0, 0); }
-}
+/* grain is a still texture: the animated shift caused visible frame hitches over the film */
 .cine-content {
   position: relative; z-index: 2; width: 100%;
   padding-top: 150px; padding-bottom: 190px;
   perspective: 1000px; text-align: left;
 }
-.cine-kicker {
-  font-family: var(--mono); font-size: 15px; font-weight: 600; letter-spacing: 0.14em;
-  text-transform: uppercase; color: rgba(255,255,255,0.95);
-  display: inline-flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 26px;
-  background: rgba(8,13,26,0.38); border: 1px solid rgba(255,255,255,0.22);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  border-radius: 999px; padding: 12px 22px;
+/* eyebrow: the site's rule-and-caps lockup, set for the dark film */
+.cine-eyebrow {
+  font-family: var(--mono); font-size: 12.5px; font-weight: 600; letter-spacing: 0.24em;
+  text-transform: uppercase; color: rgba(255,255,255,0.86);
+  display: flex; align-items: center; gap: 16px; margin-bottom: 30px;
 }
-.cine-kicker .kick-sep { color: rgba(255,255,255,0.45); }
-.cine-kicker .pulse-dot {
+.cine-eyebrow::before {
+  content: ""; width: 44px; height: 2px; background: var(--pulse); flex: none;
+  box-shadow: 0 0 12px rgba(255,68,56,0.55);
+}
+/* availability: a quiet glass chip seated with the CTAs, not shouting over the title */
+.cine-status {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.85);
+  background: rgba(8,13,26,0.34); border: 1px solid rgba(255,255,255,0.22);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px; padding: 12px 20px; margin-left: 6px;
+}
+.cine-status .kick-sep { color: rgba(255,255,255,0.45); }
+.cine-status .pulse-dot {
   width: 7px; height: 7px; border-radius: 50%; background: var(--pulse);
   box-shadow: 0 0 0 0 rgba(255,68,56,0.4); animation: pulse 2.4s infinite;
 }
@@ -415,7 +417,7 @@ header.site { transition: background 0.35s ease, border-color 0.35s ease; }
   .monitor-dock .monitor { margin-top: -96px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cine-kicker .pulse-dot { animation: none; }
+  .cine-status .pulse-dot { animation: none; }
   .method-meta .mm-dot { animation: none; }
 }
 

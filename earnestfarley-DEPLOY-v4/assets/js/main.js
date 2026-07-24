@@ -82,7 +82,7 @@
   }
   if (cine) {
     var words = cine.querySelectorAll(".cine-title .w");
-    var support = cine.querySelectorAll(".cine-kicker, .cine-lede, .hero-ctas, .cine-ticker");
+    var support = cine.querySelectorAll(".cine-eyebrow, .cine-lede, .hero-ctas, .cine-ticker");
     if (hasGsap && !reduced) {
       /* words fly in from deep z, landing line by line */
       gsap.set(words, { z: -460, y: 64, rotationX: 28, opacity: 0, transformOrigin: "50% 100%" });
@@ -94,8 +94,8 @@
 
       /* the city breathes: a slow Ken Burns drift on the film itself */
       gsap.to("#heroFilm", {
-        scale: 1.07, duration: 28, ease: "sine.inOut", yoyo: true, repeat: -1,
-        transformOrigin: "50% 42%"
+        scale: 1.05, duration: 34, ease: "sine.inOut", yoyo: true, repeat: -1,
+        transformOrigin: "50% 42%", force3D: true
       });
 
       /* scroll: the photograph sinks and the words lift away */
@@ -103,11 +103,11 @@
       if (window.ScrollTrigger) {
         gsap.to(".cine-bg", {
           yPercent: 16, ease: "none",
-          scrollTrigger: { trigger: cine, start: "top top", end: "bottom top", scrub: 0.3 }
+          scrollTrigger: { trigger: cine, start: "top top", end: "bottom top", scrub: 0.9 }
         });
         gsap.to(".cine-content", {
           yPercent: -6, opacity: 0.35, ease: "none",
-          scrollTrigger: { trigger: cine, start: "top top", end: "bottom 35%", scrub: 0.3 }
+          scrollTrigger: { trigger: cine, start: "top top", end: "bottom 35%", scrub: 0.9 }
         });
       }
 
@@ -142,7 +142,7 @@
       /* poster only: no motion for reduced-motion visitors */
       film.removeAttribute("autoplay");
     } else {
-      film.playbackRate = 1.7; /* time-lapse feel: traffic and light move faster */
+      film.playbackRate = 1.0; /* native speed: buttery pan over the skyline, no judder */
       var playFilm = function () { film.play().catch(function () {}); };
       if ("IntersectionObserver" in window) {
         new IntersectionObserver(function (en) {
